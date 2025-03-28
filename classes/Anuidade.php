@@ -71,4 +71,14 @@ class Anuidade {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function buscarPorId($id) {
+        $stmt = $this->conn->prepare("SELECT * FROM anuidade WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public function atualizar($id) {
+        $stmt = $this->conn->prepare("UPDATE anuidade SET valor = ? WHERE id = ?");
+        return $stmt->execute([$this->valor, $id]);
+    }
 }

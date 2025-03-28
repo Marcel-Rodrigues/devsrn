@@ -32,6 +32,16 @@ $associados = $assoc->listarTodos();
             <div class="card-body">
                 <?php 
                 $cobrancas = $cobrancaObj->listarPorAssociado($a['id']);
+
+                $valorTotal = 0;
+                $anuidadesPendentes = [];
+                foreach ($cobrancas as $c) {
+                    if (!$c['status']) {
+                        $valorTotal += $c['valor'];
+                        $anuidadesPendentes[] = $c['ano'];
+                    }
+                }
+
                 if (count($cobrancas) === 0): ?>
                     <p class="text-muted">Nenhuma cobrança registrada.</p>
                 <?php else: ?>
@@ -73,6 +83,19 @@ $associados = $assoc->listarTodos();
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+
+                    <?php if (!empty($anuidadesPendentes)): ?>
+                        <div class="mt-3 alert alert-warning">
+                            <strong>Checkout:</strong> 
+                            Anuidades em aberto: <?= implode(', ', $anuidadesPendentes) ?> <br>
+                            Valor total devido: <strong>R$ <?= number_format($valorTotal, 2, ',', '.') ?></strong>
+                        </div>
+                    <?php else: ?>
+                        <div class="mt-3 alert alert-success">
+                            <strong>Pagamento em dia!</strong> Nenhuma anuidade pendente.
+                        </div>
+                    <?php endif; ?>
+
                 <?php endif; ?>
             </div>
         </div>
