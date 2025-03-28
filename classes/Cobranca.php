@@ -82,4 +82,18 @@ class Cobranca {
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([$this->associado_id, $this->anuidade_id]);
     }
+
+    public function listarAssociadosParaAnuidade($anoAnuidade) {
+        $dataMinima = $anoAnuidade . '-01-01';
+
+        $query = "SELECT *
+                  FROM associado
+                  WHERE data_filiacao <= :data_filiacao_minima";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':data_filiacao_minima', $dataMinima);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
