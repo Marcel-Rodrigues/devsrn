@@ -30,14 +30,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $anoAnuidade = $_POST['ano_anuidade'];
         $dataVencimento = $_POST['data_vencimento_anuidade'];
         
-        $associadosValidos = $cobranca->listarAssociadosParaAnuidade($anoAnuidade);
-
         $anuidade = $anuidadeModel->buscarPorAno($anoAnuidade);
+
+        
+
         if (!$anuidade) {
             $msg = "<div class='alert alert-danger'>Anuidade do ano selecionado não encontrada.</div>";
         } else {
             $anuidadeId = $anuidade['id'];
             $contador = 0;
+
+            $associadosValidos = $cobranca->listarAssociadosParaAnuidade($anoAnuidade, $anuidadeId);
 
             foreach ($associadosValidos as $associado) {
                 $valorBruto = $anuidade['valor'];
