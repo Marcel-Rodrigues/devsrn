@@ -44,3 +44,16 @@ CREATE TABLE IF NOT EXISTS `devsrn`.`cobranca` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+/* Correção: inclusão de auto incremento */
+ALTER TABLE `devsrn`.`associado` 
+CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `devsrn`.`anuidade` 
+CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT ;
+
+
+/* Alteração para criar espelho do valor e inclusão de data do pagamento */
+ALTER TABLE `devsrn`.`cobranca` 
+ADD COLUMN `valor` DECIMAL(10,2) NOT NULL AFTER `anuidade_id`,
+ADD COLUMN `data_pagamento` DATETIME NULL DEFAULT NULL AFTER `data_vencimento`;
