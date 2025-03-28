@@ -1,5 +1,6 @@
 <?php
-class Associado {
+class Associado
+{
     private $id;
     private $nome;
     private $email;
@@ -7,30 +8,55 @@ class Associado {
     private $data_filiacao;
     private $conn;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    public function getId() { return $this->id; }
+    public function getId()
+    {
+        return $this->id;
+    }
 
-    public function getNome() { return $this->nome; }
-    public function setNome($nome) { $this->nome = trim($nome); }
+    public function getNome()
+    {
+        return $this->nome;
+    }
+    public function setNome($nome)
+    {
+        $this->nome = trim($nome);
+    }
 
-    public function getEmail() { return $this->email; }
-    public function setEmail($email) { $this->email = trim($email); }
+    public function getEmail()
+    {
+        return $this->email;
+    }
+    public function setEmail($email)
+    {
+        $this->email = trim($email);
+    }
 
-    public function getCpf() { return $this->cpf; }
-    public function setCpf($cpf) {
+    public function getCpf()
+    {
+        return $this->cpf;
+    }
+    public function setCpf($cpf)
+    {
         $this->cpf = preg_replace('/\D/', '', $cpf);
     }
 
-    public function getDataFiliacao() { return $this->data_filiacao; }
-    public function setDataFiliacao($data) {
+    public function getDataFiliacao()
+    {
+        return $this->data_filiacao;
+    }
+    public function setDataFiliacao($data)
+    {
         $dataFormatada = date('Y-m-d', strtotime($data));
         $this->data_filiacao = $dataFormatada;
     }
 
-    public function salvar() {
+    public function salvar()
+    {
         $sql = "INSERT INTO associado (nome, email, cpf, data_filiacao) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([
@@ -41,7 +67,8 @@ class Associado {
         ]);
     }
 
-    public function atualizar($id) {
+    public function atualizar($id)
+    {
         $sql = "UPDATE associado SET nome = ?, email = ?, cpf = ?, data_filiacao = ? WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([
@@ -51,27 +78,42 @@ class Associado {
             $this->data_filiacao,
             $id
         ]);
-    }    
+    }
 
-    public function buscarPorId($id) {
+    public function buscarPorId($id)
+    {
         $stmt = $this->conn->prepare("SELECT * FROM associado WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function listarTodos() {
-        $stmt = $this->conn->prepare("SELECT * FROM associado ORDER BY nome");
+    public function listarTodos($filtro = '', $ordenacao = 'nome ASC')
+    {
+        $sql = "SELECT * FROM associado WHERE 1";
+        if (!empty($filtro)) {
+            $sql .= " AND (nome LIKE :filtro OR email LIKE :filtro OR cpf LIKE :filtro)";
+        }
+        $sql .= " ORDER BY " . $ordenacao;
+
+        $stmt = $this->conn->prepare($sql);
+
+        if (!empty($filtro)) {
+            $stmt->bindValue(':filtro', "%$filtro%", PDO::PARAM_STR);
+        }
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function buscarPorEmail($email) {
+    public function buscarPorEmail($email)
+    {
         $stmt = $this->conn->prepare("SELECT * FROM associado WHERE email = ?");
         $stmt->execute([$email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function buscarPorCpf($cpf) {
+    public function buscarPorCpf($cpf)
+    {
         $stmt = $this->conn->prepare("SELECT * FROM associado WHERE cpf = ?");
         $stmt->execute([$cpf]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
