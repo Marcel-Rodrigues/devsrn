@@ -23,14 +23,17 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
-                                <a href="../../views/associado/form.php" class="nav-link <?= ($current_page == 'form.php' && strpos($_SERVER['REQUEST_URI'], 'associado') !== false) ? 'active' : '' ?>">Cadastrar Associado</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle <?= (strpos($_SERVER['REQUEST_URI'], 'associado') !== false) ? 'active' : '' ?>" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                    Associado
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item <?= ($current_page == 'form.php' && strpos($_SERVER['REQUEST_URI'], 'associado') !== false) ? 'active' : '' ?>" href="../../views/associado/form.php">Cadastrar Associado</a></li>
+                                    <li><a class="dropdown-item <?= ($current_page == 'lista.php') ? 'active' : '' ?>" href="../../views/associado/lista.php">Listar Associados</a></li>
+                                </ul>
                             </li>
                             <li class="nav-item">
-                                <a href="../../views/associado/lista.php" class="nav-link <?= ($current_page == 'lista.php') ? 'active' : '' ?>">Listar Associados</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="../../views/anuidade/form.php" class="nav-link <?= ($current_page == 'form.php' && strpos($_SERVER['REQUEST_URI'], 'anuidade') !== false) ? 'active' : '' ?>">Cadastrar Anuidade</a>
+                                <a href="../../views/anuidade/form.php" class="nav-link <?= ($current_page == 'form.php' && strpos($_SERVER['REQUEST_URI'], 'anuidade') !== false) ? 'active' : '' ?>">Anuidade</a>
                             </li>
                             <li class="nav-item">
                                 <a href="../../views/cobranca/form.php" class="nav-link <?= ($current_page == 'form.php' && strpos($_SERVER['REQUEST_URI'], 'cobranca') !== false) ? 'active' : '' ?>">Gerar Cobrança</a>
@@ -42,5 +45,6 @@
                     </div>
                 </div>
             </nav>
+
 
         <?php } ?>

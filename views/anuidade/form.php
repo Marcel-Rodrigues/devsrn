@@ -47,6 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $lista = $anuidade->listarTodas();
+$totalAssociados = $anuidade->contarTodos();
+$pendentes = $anuidade->contarPendentes();
+$valores = $anuidade->calcularValores();
+$valorPendente = $valores['pendente'] ?? 0;
+$totalArrecadado = $valores['arrecadado'] ?? 0;
+
 ?>
 
 
@@ -87,20 +93,45 @@ $lista = $anuidade->listarTodas();
     <?php if (count($lista) > 0): ?>
         <hr>
         <h4 class="mt-4">Anuidades Cadastradas</h4>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="card shadow-sm p-3">
+                    <p><strong>Total de Cobranças:</strong> <?= $totalAssociados ?></p>
+                    <p><strong>Cobranças Pendentes:</strong> <?= $pendentes ?></p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm p-3">
+                    <p><strong>Total Arrecadado:</strong> R$ <?= number_format($totalArrecadado, 2, ',', '.') ?></p>
+                    <p><strong>Valor Pendente:</strong> R$ <?= number_format($valorPendente, 2, ',', '.') ?></p>
+                </div>
+            </div>
+        </div>
+
         <table class="table table-bordered table-sm mt-2">
             <thead>
                 <tr>
                     <th>Ano</th>
                     <th>Valor</th>
+                    <th>Total Associados</th>
+                    <th>Pendentes</th>
+                    <th>Valor Pendente</th>
+                    <th>Total Arrecadado</th>
                     <th>Data de Cadastro</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($lista as $a): ?>
+                <?php foreach ($lista as $a):
+                    $resumo = $anuidade->obterResumoPorAno($a['ano']);
+                ?>
                     <tr>
                         <td><?= $a['ano'] ?></td>
                         <td>R$ <?= number_format($a['valor'], 2, ',', '.') ?></td>
+                        <td><?= $resumo['total_associados'] ?></td>
+                        <td><?= $resumo['pendentes'] ?></td>
+                        <td>R$ <?= number_format($resumo['valor_pendente'], 2, ',', '.') ?></td>
+                        <td>R$ <?= number_format($resumo['arrecadado'], 2, ',', '.') ?></td>
                         <td><?= date('d/m/Y H:i', strtotime($a['data_cadastro'])) ?></td>
                         <td>
                             <a href="form.php?editar=<?= $a['id'] ?>" class="btn btn-sm btn-warning">Editar</a>

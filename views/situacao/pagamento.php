@@ -51,6 +51,7 @@ $associados = $assoc->listarTodos();
                                 <th>Ano</th>
                                 <th>Valor</th>
                                 <th>Vencimento</th>
+                                <th>Pagamento</th>
                                 <th>Status</th>
                                 <th>Ação</th>
                             </tr>
@@ -61,6 +62,7 @@ $associados = $assoc->listarTodos();
                                     <td><?= $c['ano'] ?></td>
                                     <td>R$ <?= number_format($c['valor'], 2, ',', '.') ?></td>
                                     <td><?= date('d/m/Y', strtotime($c['data_vencimento'])) ?></td>
+                                    <td><?= !empty($c['data_pagamento']) ? date('d/m/Y', strtotime($c['data_pagamento'])) : '' ?></td>
                                     <td>
                                         <?php if ($c['status']): ?>
                                             <span class="badge bg-success">Paga</span>
