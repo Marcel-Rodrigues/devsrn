@@ -59,12 +59,20 @@ class Associado
     {
         $sql = "INSERT INTO associado (nome, email, cpf, data_filiacao) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([
+        $sucesso = $stmt->execute([
             $this->nome,
             $this->email,
             $this->cpf,
             $this->data_filiacao
         ]);
+
+        if ($sucesso) {
+            $idAssociado = $this->conn->lastInsertId();
+            $anoFiliacao = date('Y', strtotime($this->data_filiacao));
+            $this->criarCobrancas($idAssociado, $anoFiliacao);
+        }
+
+        return $sucesso;
     }
 
     public function atualizar($id)
@@ -119,7 +127,29 @@ class Associado
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function qtdTotal() {
+    public function qtdTotal()
+    {
         return $this->conn->query("SELECT COUNT(*) FROM associado")->fetchColumn();
+    }
+
+    private function criarCobrancas($idAssociado, $anoFiliacao)
+    {
+        $sql = "SELECT id, ano, valor FROM anuidade WHERE ano >= ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$anoFiliacao]);
+        $anuidades = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $sqlInsert = "INSERT INTO cobranca (associado_id, anuidade_id, valor, data_vencimento, status) VALUES (?, ?, ?, ?, 0)";
+        $stmtInsert = $this->conn->prepare($sqlInsert);
+
+        foreach ($anuidades as $anuidade) {
+            $vencimento = $anuidade['ano'] . '-12-31';
+            $stmtInsert->execute([
+                $idAssociado,
+                $anuidade['id'],
+                $anuidade['valor'],
+                date('Y-m-d', strtotime($vencimento)),
+            ]);
+        }
     }
 }
