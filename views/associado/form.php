@@ -57,12 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="col-2">
                 <label class="form-label">E-mail</label>
-                <input type="email" name="email" class="form-control" required>
+                <input type="email" name="email" autocomplete="off" class="form-control" required>
             </div>
 
             <div class="col-2">
                 <label class="form-label">CPF</label>
-                <input type="text" name="cpf" class="form-control cpf" required>
+                <input type="text" name="cpf" autocomplete="off" class="form-control cpf" required>
             </div>
 
             <div class="col-2">

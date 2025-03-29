@@ -140,4 +140,43 @@ class Cobranca
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function qtdPendente() {
+        $sql = "SELECT COUNT(*) FROM cobranca 
+                WHERE status = 0";
+        return $this->conn->query($sql)->fetchColumn();
+    }
+
+    public function qtdVencidas() {
+        $sql = "SELECT COUNT(*) FROM cobranca 
+                WHERE status = 0 AND data_vencimento < CURDATE()";
+        return $this->conn->query($sql)->fetchColumn();
+    }
+
+    public function qtdPagas() {
+        $sql = "SELECT COUNT(*) FROM cobranca 
+                WHERE status = 1";
+        return $this->conn->query($sql)->fetchColumn();
+    }
+    
+    public function totalArrecadado() {
+        $sql = "SELECT SUM(valor) FROM cobranca WHERE status = 1";
+        return $this->conn->query($sql)->fetchColumn() ?: 0;
+    }
+    
+    public function totalPendente() {
+        $sql = "SELECT SUM(valor) FROM cobranca WHERE status = 0";
+        return $this->conn->query($sql)->fetchColumn() ?: 0;
+    }
+    
+    public function pagamentosPorAno() {
+        $sql = "SELECT a.ano, SUM(c.valor) as total 
+                FROM cobranca c
+                JOIN anuidade a ON c.anuidade_id = a.id
+                WHERE c.status = 1
+                GROUP BY a.ano
+                ORDER By a.ano ASC"    ;
+        $stmt = $this->conn->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

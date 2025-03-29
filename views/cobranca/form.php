@@ -16,10 +16,17 @@ $anuidadeModel = new Anuidade($conn);
 $msg = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    
+    
     if (isset($_POST['gerar_manual'])) {
+
+        $anuidade = $anuidadeModel->buscarPorId($_POST['anuidade_id']);
+
         $cobranca->setAssociadoId($_POST['associado_id']);
         $cobranca->setAnuidadeId($_POST['anuidade_id']);
         $cobranca->setDataVencimento($_POST['data_vencimento']);
+        $cobranca->setValor((float)str_replace(',', '.', $anuidade['valor']));
 
         if ($cobranca->salvar()) {
             $msg = "<div class='alert alert-success'>Cobrança gerada com sucesso!</div>";
@@ -31,8 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $dataVencimento = $_POST['data_vencimento_anuidade'];
         
         $anuidade = $anuidadeModel->buscarPorAno($anoAnuidade);
-
-        
 
         if (!$anuidade) {
             $msg = "<div class='alert alert-danger'>Anuidade do ano selecionado não encontrada.</div>";
@@ -77,7 +82,6 @@ $anuidades = $anuidadeModel->listarTodas();
         <button type="button" class="btn btn-outline-primary" id="btnAutomatico" onclick="toggleModo('automatico')">Gerar Para Todos Associados</button>
     </div>
 
-    <!-- Opção Manual -->
     <form method="post" id="formManual">
         <input type="hidden" name="gerar_manual" value="1">
         <div class="row col-12 d-flex">
@@ -109,7 +113,6 @@ $anuidades = $anuidadeModel->listarTodas();
         </div>
     </form>
 
-    <!-- Opção Automática -->
     <form method="post" id="formAutomatico" style="display: none;">
         <input type="hidden" name="gerar_automatico" value="1">
         <div class="row">

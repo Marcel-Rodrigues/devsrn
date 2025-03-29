@@ -125,9 +125,9 @@ $associados = $assoc->listarTodos();
                                 Valor total devido: <strong>R$ <?= number_format($valorTotal, 2, ',', '.') ?></strong>
                             </div>
                         <?php else: ?>
-                            <div class="mt-3 alert alert-success">
+                            <!-- <div class="mt-3 alert alert-success">
                                 <strong>Pagamento em dia!</strong> Nenhuma anuidade pendente.
-                            </div>
+                            </div> -->
                         <?php endif; ?>
 
                     <?php endif; ?>

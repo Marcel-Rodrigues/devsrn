@@ -4,6 +4,10 @@ body {
     padding-top: 70px;
 }
 
+.navbar {
+    background: #fff !important;
+}
+
 .navbar-brand {
     font-size: 1.5rem;
 }
@@ -82,6 +86,65 @@ form button {
     padding: 10px 15px;
     background: #f8f9fa;
     transition: background 0.3s ease-in-out;
+}
+
+.list-group-item:hover {
+    transform: translateX(5px);
+}
+
+.card {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    border: 1px solid #e3e6f0;
+    border-radius: 0.35rem;
+}
+
+.card-header {
+    font-weight: 700;
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+hover-effect:hover {
+    transform: translateY(-3px);
+    transition: transform 0.2s ease;
+}
+
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-card {
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.action-card:hover {
+    background-color: #f8f9fa;
+}
+
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+
+.rounded-top-3 {
+    border-top-left-radius: 1rem !important;
+    border-top-right-radius: 1rem !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+}
+
+@media (max-width: 768px) {
+    .action-card {
+        border-right: none;
+    }
 }
 
 

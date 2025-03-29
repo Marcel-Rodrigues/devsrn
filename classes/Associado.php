@@ -118,4 +118,8 @@ class Associado
         $stmt->execute([$cpf]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function qtdTotal() {
+        return $this->conn->query("SELECT COUNT(*) FROM associado")->fetchColumn();
+    }
 }
